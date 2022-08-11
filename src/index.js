@@ -3,11 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { MoviesDataContextProvider } from './context/MoviesDataContext';
+import { ActiveGenreProvider } from './context/ActiveGenreContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <ActiveGenreProvider>
+      <MoviesDataContextProvider>
+        <App />
+      </MoviesDataContextProvider>
+    </ActiveGenreProvider>
   </React.StrictMode>
 );
 
