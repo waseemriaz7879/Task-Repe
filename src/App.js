@@ -7,12 +7,21 @@ import AddNewMovieModal from './components/Modal/AddNewMovieModal';
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import SignInPage from './pages/SigninPage';
+import SignInRoute from '../src/routes/SignInRoute';
 function App() {
   return (
     <>
       <Routes>
-        <Route index path="/signin" element={<SignInPage />} />
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<SignInPage />} />
+
+        <Route
+          path="/dashboard"
+          element={
+            <SignInRoute>
+              <Dashboard />
+            </SignInRoute>
+          }
+        />
       </Routes>
     </>
   );
