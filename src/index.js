@@ -5,14 +5,20 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { MoviesDataContextProvider } from './context/MoviesDataContext';
 import { ActiveGenreProvider } from './context/ActiveGenreContext';
+import { UserAuthContextProvider } from './context/UserContext';
+import { BrowserRouter } from 'react-router-dom';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ActiveGenreProvider>
-      <MoviesDataContextProvider>
-        <App />
-      </MoviesDataContextProvider>
-    </ActiveGenreProvider>
+    <BrowserRouter>
+      <UserAuthContextProvider>
+        <ActiveGenreProvider>
+          <MoviesDataContextProvider>
+            <App />
+          </MoviesDataContextProvider>
+        </ActiveGenreProvider>
+      </UserAuthContextProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
