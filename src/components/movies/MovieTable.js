@@ -1,24 +1,51 @@
 import Table from 'react-bootstrap/Table';
 import TableItems from './TableItems';
-function MoviesTable({ movies, sorting, handleOnClickDelete }) {
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+function MoviesTable({
+  movies,
+  sorting,
+  handleOnClickDelete,
+  orderBy,
+  handleEditMovie,
+}) {
+  const renderTooltip = props => (
+    <Tooltip id="button-tooltip" {...props}>
+      Click to Change Order {orderBy}
+    </Tooltip>
+  );
   return (
     <Table>
       <thead>
         <tr>
-          <th
-            onClick={() => {
-              sorting('_id');
-            }}
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 250, hide: 100 }}
+            overlay={renderTooltip}
           >
-            #
-          </th>
-          <th
-            onClick={() => {
-              sorting('title');
-            }}
+            <th
+              onClick={() => {
+                sorting('_id');
+              }}
+            >
+              {' '}
+              #
+            </th>
+          </OverlayTrigger>
+
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 250, hide: 100 }}
+            overlay={renderTooltip}
           >
-            Title
-          </th>
+            <th
+              onClick={() => {
+                sorting('title');
+              }}
+            >
+              Title
+            </th>
+          </OverlayTrigger>
           <th
             onClick={() => {
               sorting('genre');
@@ -50,6 +77,7 @@ function MoviesTable({ movies, sorting, handleOnClickDelete }) {
               movie={movie}
               handleOnClickDelete={handleOnClickDelete}
               key={movie._id}
+              handleEditMovie={handleEditMovie}
             />
           );
         })}

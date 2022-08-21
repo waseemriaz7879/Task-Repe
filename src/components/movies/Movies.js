@@ -2,16 +2,14 @@ import React from 'react';
 import MoviesTable from './MovieTable';
 import { useMoviesDataContext } from '../../context/MoviesDataContext';
 import { useActiveGenreContext } from '../../context/ActiveGenreContext';
-
 import PaginationComponent from '../Pagination/PagintaionComponent';
 import ConfirmationModal from '../Modal/ConfirmationModal';
 import SearchBar from '../Search/SearchBar';
-
+import UpdateMovieModal from '../Modal/UpdateMoviemodal';
 export default function Movies() {
   //states
-  const [activeGenre, { handleActiveGenreChange }] = useActiveGenreContext();
-  const [{ moviesData, MoviesDataInJSON }, { handleMoviesDataChange }] =
-    useMoviesDataContext();
+  const [activeGenre] = useActiveGenreContext();
+  const [{ moviesData }, { handleMoviesDataChange }] = useMoviesDataContext();
   // const [movies, setMovies] = React.useState(moviesData);
   const [orderBy, setOrderBy] = React.useState('asc');
   const [moviesPerPage] = React.useState(4);
@@ -20,8 +18,15 @@ export default function Movies() {
     isVisible: false,
     id: null,
   });
+  // const { showAddNewMovieModal, setShowAddNewMovieModal } = React.useState({
+  //   isVisible: false,
+  //   id: null,
+  // });
   const [isChecked, setIsChecked] = React.useState(false);
   const [searchInput, setSearchInput] = React.useState('');
+  const [openUpdateModal, setOpenUpdateModal] = React.useState(false);
+  const [editAbleData, setEditAbleData] = React.useState('');
+
   /// functions
 
   //Selected Moviesby genre
@@ -62,7 +67,13 @@ export default function Movies() {
   const endIndex = startIndex + moviesPerPage - 1;
   const totalMovies = selectedMovies.length;
   // console.log(totalMovies);
-  const moviesToShow = selectedMovies.filter((movie, index) => {
+
+  //get searched movies
+  const searchedMovies = selectedMovies.filter(movie => {
+    return movie.title.toLowerCase().startsWith(searchInput.toLowerCase());
+  });
+
+  const moviesToShow = searchedMovies.filter((_movie, index) => {
     if (index >= startIndex && index <= endIndex) {
       return true;
     }
@@ -117,21 +128,27 @@ export default function Movies() {
     setSearchInput(e.target.value);
     console.log(searchInput);
   };
-  React.useEffect(() => {
-    const searchedMovies = [...MoviesDataInJSON].filter(movie => {
-      return movie.title.toLowerCase().startsWith(searchInput.toLowerCase());
-    });
-    handleMoviesDataChange(searchedMovies);
-  }, [searchInput]);
+  //edit Movie
+
+  const handleEditMovie = id => {
+    setOpenUpdateModal(true);
+    setEditAbleData(
+      moviesData.filter(movie => {
+        return movie._id === id;
+      })
+    );
+  };
 
   return (
     <div>
-      <h1>movie</h1>
+      <h1>Movie Table</h1>
       <SearchBar handleSearchBar={handleSearchBar} />
       <MoviesTable
         movies={moviesToShow}
         sorting={sorting}
         handleOnClickDelete={handleOnClickDelete}
+        orderBy={orderBy}
+        handleEditMovie={handleEditMovie}
       />
 
       <PaginationComponent
@@ -145,6 +162,11 @@ export default function Movies() {
         handleCloseModal={handleCloseModal}
         handleConfirmDelete={handleConfirmDelete}
         handleCheckBox={handleCheckBox}
+      />
+      <UpdateMovieModal
+        openUpdateModal={openUpdateModal}
+        setOpenUpdateModal={setOpenUpdateModal}
+        editMovieData={editAbleData}
       />
     </div>
   );

@@ -5,7 +5,7 @@ import { Tab } from 'react-bootstrap';
 
 function ActiveExample() {
   const [activeGenre, { handleActiveGenreChange }] = useActiveGenreContext();
-  console.log(activeGenre);
+  // console.log(activeGenre);
   const handleSelectGenre = genre => {
     handleActiveGenreChange({
       id: genre._id,
