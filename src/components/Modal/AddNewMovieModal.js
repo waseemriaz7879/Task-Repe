@@ -31,13 +31,15 @@ function AddNewMovieModal() {
     movies.push({
       _id: uniqid(),
       title: movieName,
-      genre: { _id: 1, name: 'action' },
+      genre: { name: genreName },
       dailyRentalRate: movieRating,
       numberInStock: movieStock,
     });
     handleMoviesDataChange(movies);
     console.log('save', movies);
+    setModalShow(false);
   };
+  console.log(genreName);
   return (
     <>
       <Button
@@ -90,9 +92,9 @@ function AddNewMovieModal() {
                       onChange={e => setGenreName(e.target.value)}
                     >
                       <option>Select Genre</option>
-                      <option value="1">Action</option>
-                      <option value="2">Comedy</option>
-                      <option value="3">Thriller</option>
+                      <option value="Action">Action</option>
+                      <option value="Comedy">Comedy</option>
+                      <option value="Thriller">Thriller</option>
                     </Form.Select>
                   </FloatingLabel>
                 </div>

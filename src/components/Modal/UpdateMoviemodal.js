@@ -5,38 +5,60 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { useMoviesDataContext } from '../../context/MoviesDataContext';
 import { FormGroup } from 'react-bootstrap';
-import uniqid from 'uniqid';
+// import uniqid from 'uniqid';
 
 function UpdateMovieModal({
   openUpdateModal,
   setOpenUpdateModal,
-  editMovieData,
+  clearEditData,
+  editAbleData,
 }) {
-  //   const [{ data }] = editMovieData;
-  //   console.log(editMovieData);
-  const handleCloseModal = () => {
-    setOpenUpdateModal(false);
-  };
-
-  const [{ moviesData }, { handleMoviesDataChange }] = useMoviesDataContext();
-
   const [movieName, setMovieName] = React.useState('');
   const [genreName, setGenreName] = React.useState('');
   const [movieRating, setMovieRating] = React.useState('');
   const [movieStock, setMovieStock] = React.useState('');
+  const [currentMovie, setCurrentMovie] = React.useState();
+  const [{ moviesData }, { handleMoviesDataChange }] = useMoviesDataContext();
+  console.log(currentMovie);
+  React.useEffect(() => {
+    if (openUpdateModal === true) {
+      setCurrentMovie(editAbleData);
+    }
+  }, [openUpdateModal === true]);
+  React.useEffect(() => {
+    if (currentMovie) {
+      setMovieName(currentMovie[0].title);
+      setGenreName(currentMovie[0].genre.name);
+      setMovieRating(currentMovie[0].dailyRentalRate);
+      setMovieStock(currentMovie[0].numberInStock);
+      // console.log(editAbleData[0].genre.name);
+    }
+  }, [editAbleData]);
 
-  const handleSaveMovie = () => {
-    const movies = [...moviesData];
-    movies.push({
-      _id: uniqid(),
-      title: movieName,
-      genre: { _id: 1, name: 'action' },
-      dailyRentalRate: movieRating,
-      numberInStock: movieStock,
-    });
-    handleMoviesDataChange(movies);
-    // console.log('save', movies);
+  const handleCloseModal = () => {
+    clearEditData();
+    setOpenUpdateModal(false);
   };
+
+  const handleEditDataSave = e => {
+    e.preventDefault();
+
+    // const updatedMovies = [...moviesData];
+    // const index = updatedMovies.findIndex(el => el._id === editAbleData._id);
+    // updatedMovies[index] = {
+    //   ...updatedMovies[index],
+    //   title: movieName,
+    // };
+
+    const updatedMovie = moviesData.map(data => {
+      return data._id === currentMovie._id ? currentMovie : data;
+    });
+    console.log(updatedMovie);
+    handleMoviesDataChange(updatedMovie);
+    console.log('save is working');
+    setOpenUpdateModal(false);
+  };
+
   return (
     <>
       <Modal
@@ -49,11 +71,11 @@ function UpdateMovieModal({
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Add new Movie
+            Update Movie
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleSaveMovie}>
+          <form onSubmit={handleEditDataSave}>
             <FormGroup>
               <div className="row">
                 <div className="col-6">
@@ -66,7 +88,12 @@ function UpdateMovieModal({
                       type="text"
                       placeholder="Movie Name"
                       value={movieName}
-                      onChange={e => setMovieName(e.target.value)}
+                      onChange={e =>
+                        setCurrentMovie({
+                          ...currentMovie,
+                          title: e.target.value,
+                        })
+                      }
                     />
                   </FloatingLabel>
                 </div>
@@ -82,9 +109,9 @@ function UpdateMovieModal({
                       onChange={e => setGenreName(e.target.value)}
                     >
                       <option>Select Genre</option>
-                      <option value="1">Action</option>
-                      <option value="2">Comedy</option>
-                      <option value="3">Thriller</option>
+                      <option value="Action">Action</option>
+                      <option value="Comedy">Comedy</option>
+                      <option value="Thriller">Thriller</option>
                     </Form.Select>
                   </FloatingLabel>
                 </div>
@@ -119,13 +146,10 @@ function UpdateMovieModal({
                   </FloatingLabel>
                 </div>
               </div>
-              <Button onClick={handleSaveMovie}>Save</Button>
+              <Button type="submit">Update</Button>
             </FormGroup>
           </form>
         </Modal.Body>
-        <Modal.Footer>
-          {/* <Button onClick={handleCloseModal}>Close</Button> */}
-        </Modal.Footer>
       </Modal>
     </>
   );

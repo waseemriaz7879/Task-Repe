@@ -131,6 +131,7 @@ export default function Movies() {
   //edit Movie
 
   const handleEditMovie = id => {
+    // console.log(id);
     setOpenUpdateModal(true);
     setEditAbleData(
       moviesData.filter(movie => {
@@ -139,6 +140,10 @@ export default function Movies() {
     );
   };
 
+  const clearEditData = () => {
+    setEditAbleData('');
+  };
+  // console.log(moviesData);
   return (
     <div>
       <h1>Movie Table</h1>
@@ -166,7 +171,8 @@ export default function Movies() {
       <UpdateMovieModal
         openUpdateModal={openUpdateModal}
         setOpenUpdateModal={setOpenUpdateModal}
-        editMovieData={editAbleData}
+        editAbleData={editAbleData}
+        clearEditData={clearEditData}
       />
     </div>
   );
