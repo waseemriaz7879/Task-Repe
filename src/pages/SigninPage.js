@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 import { useUserAuthContext } from '../context/UserContext';
 export default function SignInPage() {
-  const [{ handleSetIsAuthenticated }] = useUserAuthContext();
+  const [_isAuthenticated, { handleSetIsAuthenticated }] = useUserAuthContext();
   // console.log(isAuthenticated);
   const navigate = useNavigate();
   const [emailValue, setEmailValue] = React.useState('');

@@ -22,7 +22,7 @@ export default function TableItems({
           </Button>
         </td>
         <td>
-          <Button variant="warning" onClick={() => handleEditMovie(movie._id)}>
+          <Button variant="warning" onClick={() => handleEditMovie(movie)}>
             Edit
           </Button>
         </td>

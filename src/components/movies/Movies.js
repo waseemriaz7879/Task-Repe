@@ -130,14 +130,10 @@ export default function Movies() {
   };
   //edit Movie
 
-  const handleEditMovie = id => {
+  const handleEditMovie = movie => {
     // console.log(id);
+    setEditAbleData(movie);
     setOpenUpdateModal(true);
-    setEditAbleData(
-      moviesData.filter(movie => {
-        return movie._id === id;
-      })
-    );
   };
 
   const clearEditData = () => {

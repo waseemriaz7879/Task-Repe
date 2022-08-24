@@ -13,27 +13,24 @@ function UpdateMovieModal({
   clearEditData,
   editAbleData,
 }) {
-  const [movieName, setMovieName] = React.useState('');
+  const [title, setTitle] = React.useState('');
   const [genreName, setGenreName] = React.useState('');
   const [movieRating, setMovieRating] = React.useState('');
   const [movieStock, setMovieStock] = React.useState('');
-  const [currentMovie, setCurrentMovie] = React.useState();
   const [{ moviesData }, { handleMoviesDataChange }] = useMoviesDataContext();
-  console.log(currentMovie);
+  const [currentMovie, setCurrentMovie] = React.useState();
+
   React.useEffect(() => {
-    if (openUpdateModal === true) {
+    if (openUpdateModal) {
       setCurrentMovie(editAbleData);
     }
   }, [openUpdateModal === true]);
+
   React.useEffect(() => {
     if (currentMovie) {
-      setMovieName(currentMovie[0].title);
-      setGenreName(currentMovie[0].genre.name);
-      setMovieRating(currentMovie[0].dailyRentalRate);
-      setMovieStock(currentMovie[0].numberInStock);
-      // console.log(editAbleData[0].genre.name);
+      setTitle(currentMovie.title);
     }
-  }, [editAbleData]);
+  });
 
   const handleCloseModal = () => {
     clearEditData();
@@ -43,19 +40,10 @@ function UpdateMovieModal({
   const handleEditDataSave = e => {
     e.preventDefault();
 
-    // const updatedMovies = [...moviesData];
-    // const index = updatedMovies.findIndex(el => el._id === editAbleData._id);
-    // updatedMovies[index] = {
-    //   ...updatedMovies[index],
-    //   title: movieName,
-    // };
-
     const updatedMovie = moviesData.map(data => {
       return data._id === currentMovie._id ? currentMovie : data;
     });
-    console.log(updatedMovie);
     handleMoviesDataChange(updatedMovie);
-    console.log('save is working');
     setOpenUpdateModal(false);
   };
 
@@ -87,7 +75,7 @@ function UpdateMovieModal({
                     <Form.Control
                       type="text"
                       placeholder="Movie Name"
-                      value={movieName}
+                      value={title}
                       onChange={e =>
                         setCurrentMovie({
                           ...currentMovie,
